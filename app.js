@@ -56,3 +56,56 @@ $(document).ready(function() {
         }
     });
 });
+// Initialize Swiper
+const swiper = new Swiper('.swiper-container', {
+    effect: 'coverflow',
+    grabCursor: true,
+    centeredSlides: true,
+    slidesPerView: 'auto',
+    coverflowEffect: {
+        rotate: 50,
+        stretch: 0,
+        depth: 100,
+        modifier: 1,
+        slideShadows: true,
+    },
+    pagination: {
+        el: '.swiper-pagination',
+    },
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+    },
+});
+
+// Feedback Rating System
+document.querySelectorAll('.bxs-star').forEach(star => {
+    star.addEventListener('click', function() {
+        const value = parseInt(this.dataset.value);
+        document.querySelectorAll('.bxs-star').forEach((s, index) => {
+            s.classList.toggle('active', index < value);
+        });
+        document.getElementById('selectedRating').value = value;
+    });
+});
+
+// Form Submission Handling
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        fetch(this.action, {
+            method: 'POST',
+            body: new FormData(this),
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(response => {
+            if (response.ok) {
+                alert('Message sent successfully!');
+                form.reset();
+            } else {
+                alert('Oops! Something went wrong.');
+            }
+        });
+    });
+});
