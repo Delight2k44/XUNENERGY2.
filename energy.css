@@ -1117,6 +1117,11 @@ color: #3a41ae;
 .toast-error {
     background: #dc3545;
 }
+.word-counter {
+    text-align: right;
+    font-size: 0.9rem;
+    margin: 5px 0;
+}
 
 /* Star Animation */
 @keyframes starPop {
