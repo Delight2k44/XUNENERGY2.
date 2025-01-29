@@ -1,114 +1,3 @@
-// SearchForm Section code
-let searchForm = document.querySelector('.search-form');
-document.querySelector('#search-btn').onclick = () => {
-    searchForm.classList.toggle('active');
-}
-
-window.onscroll = () => {
-    searchForm.classList.remove('active');
-}
-
-$(document).ready(function() {
-
-    $(window).scroll(function() {
-        // Navbar-bottom scrolling
-        if (this.scrollY > 5) {
-            $('.navbar-bottom').addClass("sticky");
-        } else {
-            $('.navbar-bottom').removeClass("sticky");
-        }
-
-        // Scrolling Button Btn
-        if (this.scrollY > 500) {
-            $('.scroll-up-btn').addClass("show");
-        } else {
-            $('.scroll-up-btn').removeClass("show");
-        }
-    });
-
-    // Slide-up script
-    $('.scroll-up-btn').click(function() {
-        $('html').animate({ scrollTop: 0 });
-    });
-
-    // Owl Carousel
-    $('.owl-carousel').owlCarousel({
-        margin: 5,
-        navigation: true,
-        loop: true,
-        autoplay: true,
-        autoplayTimeout: 2000,
-        autoplayHoverPause: true,
-
-        responsive: {
-            0: {
-                items: 1,
-                nav: false
-            },
-            600: {
-                items: 2,
-                nav: false
-            },
-            1000: {
-                items: 3,
-                nav: false
-            }
-        }
-    });
-});
-// Initialize Swiper
-const swiper = new Swiper('.swiper-container', {
-    effect: 'coverflow',
-    grabCursor: true,
-    centeredSlides: true,
-    slidesPerView: 'auto',
-    coverflowEffect: {
-        rotate: 50,
-        stretch: 0,
-        depth: 100,
-        modifier: 1,
-        slideShadows: true,
-    },
-    pagination: {
-        el: '.swiper-pagination',
-    },
-    navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-    },
-});
-
-// Feedback Rating System
-document.querySelectorAll('.bxs-star').forEach(star => {
-    star.addEventListener('click', function() {
-        const value = parseInt(this.dataset.value);
-        document.querySelectorAll('.bxs-star').forEach((s, index) => {
-            s.classList.toggle('active', index < value);
-        });
-        document.getElementById('selectedRating').value = value;
-    });
-});
-
-// Form Submission Handling
-document.querySelectorAll('form').forEach(form => {
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        fetch(this.action, {
-            method: 'POST',
-            body: new FormData(this),
-            headers: {
-                'Accept': 'application/json'
-            }
-        }).then(response => {
-            if (response.ok) {
-                alert('Message sent successfully!');
-                form.reset();
-            } else {
-                alert('Oops! Something went wrong.');
-            }
-        });
-    });
-});
 // Search Form Toggle
 const searchForm = document.querySelector('.search-form');
 document.querySelector('#search-btn').addEventListener('click', () => {
@@ -137,9 +26,24 @@ $(document).ready(function() {
     $('.scroll-up-btn').click(function() {
         $('html, body').animate({ scrollTop: 0 }, 800);
     });
+
+    // Owl Carousel Initialization
+    $('.owl-carousel').owlCarousel({
+        margin: 5,
+        navigation: true,
+        loop: true,
+        autoplay: true,
+        autoplayTimeout: 2000,
+        autoplayHoverPause: true,
+        responsive: {
+            0: { items: 1, nav: false },
+            600: { items: 2, nav: false },
+            1000: { items: 3, nav: false }
+        }
+    });
 });
 
-// Initialize Swiper with Better Mobile Support
+// Swiper Slideshow Configuration
 const swiper = new Swiper('.swiper-container', {
     effect: 'coverflow',
     grabCursor: true,
@@ -147,7 +51,6 @@ const swiper = new Swiper('.swiper-container', {
     slidesPerView: 'auto',
     spaceBetween: 30,
     loop: true,
-    touchEventsTarget: 'container',
     coverflowEffect: {
         rotate: 20,
         stretch: 0,
@@ -164,22 +67,35 @@ const swiper = new Swiper('.swiper-container', {
         prevEl: '.swiper-button-prev',
     },
     breakpoints: {
-        320: {
-            slidesPerView: 1,
-            spaceBetween: 10
-        },
-        768: {
-            slidesPerView: 2,
-            spaceBetween: 20
-        },
-        1024: {
-            slidesPerView: 3,
-            spaceBetween: 30
-        }
+        320: { slidesPerView: 1, spaceBetween: 10 },
+        768: { slidesPerView: 2, spaceBetween: 20 },
+        1024: { slidesPerView: 3, spaceBetween: 30 }
     }
 });
 
-// Enhanced Rating System with Animation
+// Contact Form Word Counter
+const messageField = document.querySelector('textarea[name="message"]');
+if(messageField) {
+    const wordCounter = document.createElement('div');
+    wordCounter.className = 'word-counter';
+    messageField.parentNode.insertBefore(wordCounter, messageField.nextSibling);
+
+    messageField.addEventListener('input', () => {
+        const words = messageField.value.trim().split(/\s+/);
+        const wordCount = words.length;
+        
+        wordCounter.textContent = `${350 - wordCount} words remaining`;
+        wordCounter.style.color = '#2b5087';
+        
+        if(wordCount > 350) {
+            messageField.value = words.slice(0, 350).join(' ');
+            wordCounter.textContent = 'Maximum 350 words reached!';
+            wordCounter.style.color = 'red';
+        }
+    });
+}
+
+// Enhanced Rating System
 document.querySelectorAll('.bxs-star').forEach(star => {
     star.addEventListener('click', function() {
         const value = parseInt(this.dataset.value);
@@ -197,13 +113,13 @@ document.querySelectorAll('.bxs-star').forEach(star => {
     });
 });
 
-// Enhanced Form Handling with Loading States
+// Form Submission Handling
 document.querySelectorAll('form').forEach(form => {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const submitButton = form.querySelector('button[type="submit"]');
-        const originalButtonText = submitButton.innerHTML;
-        
+        const originalText = submitButton.innerHTML;
+
         try {
             submitButton.innerHTML = '<div class="spinner"></div>';
             submitButton.disabled = true;
@@ -214,23 +130,24 @@ document.querySelectorAll('form').forEach(form => {
                 headers: { 'Accept': 'application/json' }
             });
 
-            if (response.ok) {
+            if(response.ok) {
                 form.reset();
-                // Reset stars if feedback form
+                showToast('Message sent successfully!', 'success');
+                
+                // Reset rating if feedback form
                 if(form.id === 'feedbackForm') {
                     document.querySelectorAll('.bxs-star').forEach(star => {
                         star.classList.remove('active');
                     });
                     document.getElementById('selectedRating').value = 0;
                 }
-                showToast('Message sent successfully!', 'success');
             } else {
-                showToast('Oops! Something went wrong.', 'error');
+                showToast('Submission failed. Please try again.', 'error');
             }
         } catch (error) {
-            showToast('Network error. Please check your connection.', 'error');
+            showToast('Network error. Please check connection.', 'error');
         } finally {
-            submitButton.innerHTML = originalButtonText;
+            submitButton.innerHTML = originalText;
             submitButton.disabled = false;
         }
     });
@@ -244,11 +161,8 @@ function showToast(message, type = 'info') {
     
     document.body.appendChild(toast);
     
-    setTimeout(() => {
-        toast.classList.add('show');
-    }, 100);
-    
-    setTimeout(() => {
-        toast.remove();
-    }, 3000);
+    setTimeout(() => toast.classList.add('show'), 100);
+    setTimeout(() => toast.remove(), 3000);
 }
+
+
